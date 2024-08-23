@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Writing DOM</title>
+  </head>
+  <body>
+    <!-- no more additional HTML Tags -->
+    <div id="app"></div>
+
+    <!-- write only within the script tags -->
+    <script>
+      const app = document.getElementById("app");
+      app.style.fontFamily = "sans-serif";
+      app.style.display = "flex";
+      app.style.justifyContent = "center";
+      app.style.alignItems = "center";
+      app.style.height = "100%";
+      app.style.marginTop = "110px";
+
+      const formContainer = document.createElement("form");
+      formContainer.id = "form-container";
+      formContainer.style.width = "25%";
+      formContainer.style.display = "inherit";
+      formContainer.style.flexDirection = "column";
+      app.appendChild(formContainer);
+
+      const formLabel = document.createElement("h1");
+      formLabel.id = "form-label";
+      formLabel.textContent = "Registration Form";
+      formLabel.style.textAlign = "center";
+      formContainer.appendChild(formLabel);
+
+      let inputFields = [
+        { labelName: "First Name: ", fieldName: "firstName", inputType: "text" },
+        { labelName: "Last Name: ", fieldName: "lastName", inputType: "text" },
+        { labelName: "Email: ", fieldName: "email", inputType: "email" },
+        { labelName: "Password: ", fieldName: "password", inputType: "password" },
+        { labelName: "Confirm Password: ", fieldName: "confirmPassword", inputType: "password" },
+      ];
+
+      let inputfieldsJSON = JSON.stringify(inputFields);
+      console.log(inputfieldsJSON);
+
+      inputFields.forEach((inputField) => {
+        const fieldContainer = document.createElement("div");
+        fieldContainer.className = "field-container";
+        fieldContainer.style.display = "flex";
+        fieldContainer.style.flexDirection = "column";
+        fieldContainer.style.alignItems = "left";
+        formContainer.appendChild(fieldContainer);
+
+        const fieldLabel = document.createElement("p");
+        fieldLabel.textContent = inputField.labelName;
+        fieldLabel.className = "field-label";
+        fieldLabel.style.marginBottom = "0px";
+        fieldContainer.appendChild(fieldLabel);
+
+        const input = document.createElement("input");
+        input.id = inputField.fieldName;
+        input.className = "input-field";
+        input.name = inputField.fieldName;
+        input.type = inputField.inputType;
+        input.required = true;
+        fieldContainer.appendChild(input);
+      });
+
+      const submitFields = document.createElement("input");
+      submitFields.id = "submit";
+      submitFields.type = "button";
+      submitFields.value = "Submit";
+      submitFields.style.marginTop = "15px";
+      submitFields.style.borderRadius = "7px";
+      formContainer.appendChild(submitFields);
+
+      const firstNameInput = document.getElementById("firstName");
+      const lastNameInput = document.getElementById("lastName");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const confirmPasswordInput = document.getElementById("confirmPassword");
+
+      function clearAll() {
+        firstNameInput.value = "";
+        lastNameInput.value = "";
+        emailInput.value = "";
+        passwordInput.value = "";
+        confirmPasswordInput.value = "";
+      }
+
+      emailInput.addEventListener("input", (e) => {
+        const targetEmailValue = e.target.value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        const EmailValid = emailRegex.test(targetEmailValue);
+
+        if (!EmailValid) {
+          console.error("Invalid email address");
+          EmailCorrect = false;
+        } else {
+          console.log("Valid email");
+          EmailCorrect = true;
+        }
+      });
+
+      confirmPasswordInput.addEventListener("input", (e) => {
+        const targetPasswordValue = passwordInput.value;
+        const targetConfirmPasswordValue = e.target.value;
+
+        if (targetConfirmPasswordValue !== targetPasswordValue || targetConfirmPasswordValue == "") {
+          console.error("Password does not match");
+          PasswordMatching = false;
+        } else {
+          console.log("Password matches");
+          PasswordMatching = true;
+        }
+      });
+
+      submitFields.addEventListener("click", (e) => {
+        if (firstNameInput.value === "" || lastNameInput.value === "" || emailInput.value === "" || passwordInput.value === "" || confirmPasswordInput.value === "") {
+          alert("You are required to fill in everything.");
+        } else {
+          if (!EmailCorrect) {
+            alert("Email is invalid. Try again.");
+            console.error("Invalid email");
+          }
+
+          if (!PasswordMatching) {
+            alert("Passwords does not match. Try again.");
+            console.error("Password does not match");
+          }
+
+          if (EmailCorrect == true && PasswordMatching == true) {
+            console.log("successfully registered");
+            alert("You are successfully registered!");
+
+            clearAll();
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
